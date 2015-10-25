@@ -10,9 +10,13 @@
     "default_popup": "popup.html"
   },
   "permissions": [
+    "tabs",
     "activeTab",
     "https://www.google.de/"
   ],
+  "background": {
+    "scripts": ["js/background.js"]
+  },
   "content_scripts": [
     {
       "matches": ["http://www.google.de/*", "https://www.google.de/*"],

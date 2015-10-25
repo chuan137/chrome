@@ -19,6 +19,7 @@ var observer = new MutationObserver(function(mutations) {
     }
   });    
 });
+
 // configuration of the observer:
 var config = { attributes: true, childList: true, characterData: true };
 var targetNode = document.body;
@@ -28,3 +29,9 @@ function reloadHandler() {
     console.log("results loaded");
 }
 
+//
+// handle background message
+//
+chrome.runtime.onMessage.addListener(function(msg, sender, response) {
+  console.log(sender, msg.text);
+});
