@@ -8,6 +8,7 @@ var uglify     = require('gulp-uglify');
 var sass       = require('gulp-ruby-sass');
 var livereload = require('gulp-livereload');
 var http       = require('http');
+var https      = require('https');
 var httpProxy  = require('http-proxy');
 var fs         = require('fs');
 var url        = require('url');
@@ -73,28 +74,51 @@ gulp.task('yo', function() {
 });
 
 /*
- *  var proxy = httpProxy.createProxyServer({});
- *
- *  http.createServer(function(req, res) {
- *    var hostname = req.headers.host.split(":")[0];
- *    var pathname = url.parse(req.url).pathname;
- *    console.log(req);
- *    console.log(hostname);
- *    console.log(pathname);
- *    proxy.web(req, res, { target: 'http://127.0.0.1:35728' });
- *  }).listen(35729, function() {
- *    console.log('proxy listening on port 35729');
- *  });
- *    //proxy.web(req, res, {
- *      //ssl: { 
- *        //key: fs.readFileSync('ssl/key.pem', 'utf8'),
- *        //cert: fs.readFileSync('ssl/cert.pem', 'utf8')
- *      //},
- *      //target: 'http://127.0.0.1:35728'
- *    //});
- *
- *  // LiveReload
- *  livereload.listen({port: 35728});
- *
+ *gulp.task('reload', function() {
+ *  gulp.src('')
+ *  .pipe(open({ uri: 'http:reload.extensions' }));
+ *});
  */
 
+/*
+ *  var proxy = httpProxy.createProxyServer({ ws: true });
+ *  var server = httpProxy.createServer({
+ *    ssl: {
+ *      key: fs.readFileSync('ssl/key.pem', 'utf8'),
+ *      cert: fs.readFileSync('ssl/cert.pem', 'utf8')
+ *    },
+ *    target: 'http://127.0.0.1:35728',
+ *    secure: true
+ *  }).listen(35729);
+ *
+ *  var server = http.createServer(function(req, res) {
+ *    console.log(req.headers);
+ *    proxy.web(req, res, { target: 'http://127.0.0.1:35728' });
+ *  }).listen(35729);
+ *  server.on('upgrade', function(req, res) {
+ *    console.log(req.headers);
+ *    proxy.ws(req, res, { target: 'http://127.0.0.1:35728' });
+ *  });
+ *
+ *  var server = https.createServer({
+ *    key: fs.readFileSync('ssl/key.pem', 'utf8'),
+ *    cert: fs.readFileSync('ssl/cert.pem', 'utf8')
+ *  }, function (req, res) {
+ *    console.log(req.headers);
+ *    proxy.web(req, res, { target: 'http://127.0.0.1:35728' });
+ *  }).listen(35729);
+ *  server.on('upgrade', function(req, res) {
+ *    console.log(req.headers);
+ *    proxy.ws(req, res, { target: 'http://127.0.0.1:35728' });
+ *  });
+ *
+ *  // LiveReload
+ *  livereload.listen({
+ *    basePath: 'dist',
+ *    port: 35728,
+ *    //key: fs.readFileSync('ssl/key.pem', 'utf8'),
+ *    //cert: fs.readFileSync('ssl/cert.pem', 'utf8')
+ *  });
+ *
+ */
+ 
