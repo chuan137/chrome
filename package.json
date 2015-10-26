@@ -4,6 +4,8 @@
   "devDependencies": {
     "beepbeep": "^1.2.0",
     "gulp": "^3.9.0",
+    "gulp-cached": "^1.1.0",
+    "gulp-debug": "^2.1.2",
     "gulp-livereload": "^3.8.1",
     "gulp-plumber": "^1.0.1",
     "gulp-ruby-sass": "^2.0.5",
