@@ -11,17 +11,18 @@ $(document).ready(function() {
 //
 // Mutation observer 
 //
+var gsURI;
 var observer = new MutationObserver(function(mutations) {
-  mutations.forEach(function(mutation) {
-    console.log(mutation.type);
-    if (mutation.type == "childList") {
-      console.log(mutation);
+  mutations.some(function(mutation) {
+    if (mutation.type == 'childList' && mutation.addedNodes.length > 0) {
+      return (gsURI = mutation.addedNodes[0].baseURI);
     }
   });    
+  console.log(gup(gsURI, 'q'));
 });
 
 // configuration of the observer:
-var config = { attributes: true, childList: true, characterData: true };
+var config = { attributes: true, childList: true, subtree: true };
 var targetNode = document.body;
 observer.observe(targetNode, config);
 
@@ -35,3 +36,14 @@ function reloadHandler() {
 chrome.runtime.onMessage.addListener(function(msg, sender, response) {
   console.log(sender, msg.text);
 });
+
+function gup(uri, name) {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)", "g"); 
+  var results = null;
+  do {
+    results = regex.exec(uri);
+    if (results) console.log(results[1]);
+  } while (results);
+}
+  //return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
