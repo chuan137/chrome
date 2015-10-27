@@ -1,34 +1,32 @@
 //debugger;
-
-$(document).ready(function() {
-    console.log("content script injecting");
-    console.log(document.URL);
-    var $x = $("appbar");
-    $x.bind("DomNodeInserted", reloadHandler);
-    console.log($x);
-});
+console.log('Injected ...');
 
 //
 // Mutation observer 
 //
-var gsURI;
-var observer = new MutationObserver(function(mutations) {
-  mutations.some(function(mutation) {
-    if (mutation.type == 'childList' && mutation.addedNodes.length > 0) {
-      return (gsURI = mutation.addedNodes[0].baseURI);
-    }
-  });    
-  console.log(gup(gsURI, 'q'));
+NodeList.prototype.forEach = Array.prototype.forEach;
+var observer= new MutationObserver(getSS);
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
 });
-
-// configuration of the observer:
-var config = { attributes: true, childList: true, subtree: true };
-var targetNode = document.body;
-observer.observe(targetNode, config);
-
-function reloadHandler() {
-    console.log("results loaded");
-}
+    
+function getSS (mutations) {
+  var ss;
+  mutations.some(function(mutation) {
+    mutation
+      .target
+      .querySelectorAll('form.cdr_frm input')
+      .forEach(function(el) {
+        if (el.name === 'q') {
+          ss = el.value;
+          return true;  // break loop in some()
+        }
+      });
+  });    
+  console.log(ss);
+};
 
 //
 // handle background message
@@ -36,14 +34,3 @@ function reloadHandler() {
 chrome.runtime.onMessage.addListener(function(msg, sender, response) {
   console.log(sender, msg.text);
 });
-
-function gup(uri, name) {
-  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)", "g"); 
-  var results = null;
-  do {
-    results = regex.exec(uri);
-    if (results) console.log(results[1]);
-  } while (results);
-}
-  //return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
